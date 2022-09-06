@@ -187,7 +187,6 @@ begin
       ErrMsg := jData.AsString;
       jData := json.FindPath('message');
       ErrMsg := ErrMsg + LineEnding + jData.AsString;
-
       stream := TFileStream.Create('error.json', fmCreate);
       try
         AStream.Position := 0;
@@ -195,7 +194,6 @@ begin
       finally
         stream.Free;
       end;
-
       exit;
     end;
 

@@ -135,8 +135,6 @@ begin
     try
       if Download(url, FApiKey, stream, err) then
       begin
-        stream.Position := 0;
-        TMemoryStream(stream).SaveToFile('test.json');
         FData.LoadFromJSON(stream, err);
         if err <> '' then
         begin
