@@ -1,3 +1,8 @@
+# gas_storage project specific
+/gas_storage
+/gas.exe
+/ppu
+
 # Compiled i18n files: .mo should be ignored
 *.mo
 
