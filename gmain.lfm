@@ -1,0 +1,288 @@
+object MainForm: TMainForm
+  Left = 327
+  Height = 404
+  Top = 130
+  Width = 787
+  Caption = 'European Gas Storage'
+  ClientHeight = 404
+  ClientWidth = 787
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  LCLVersion = '2.2.2.0'
+  object StatusBar: TStatusBar
+    Left = 0
+    Height = 23
+    Top = 381
+    Width = 787
+    Panels = <    
+      item
+        Width = 300
+      end    
+      item
+        Width = 50
+      end>
+    SimplePanel = False
+  end
+  object pnlCountries: TPanel
+    Left = 6
+    Height = 369
+    Top = 6
+    Width = 170
+    Align = alLeft
+    BorderSpacing.Left = 6
+    BorderSpacing.Top = 6
+    BorderSpacing.Right = 3
+    BorderSpacing.Bottom = 6
+    BevelOuter = bvNone
+    ClientHeight = 369
+    ClientWidth = 170
+    TabOrder = 1
+    object lbCountries: TListBox
+      AnchorSideLeft.Control = pnlCountries
+      AnchorSideTop.Control = pnlCountries
+      AnchorSideRight.Control = pnlCountries
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = btnDownload
+      Left = 0
+      Height = 338
+      Top = 0
+      Width = 170
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      Items.Strings = (
+        'Austria - at'
+        'Belgium - be'
+        'Bulgaria - bg'
+        'Croatia - hr'
+        'Czech Republic - cz'
+        'Denmark - dk'
+        'France - fr'
+        'Germany - de'
+        'Hungary - hu'
+        'Ireland - ie'
+        'Italy - it'
+        'Lavia - lv'
+        'Netherland - nl'
+        'Poland - pl'
+        'Portugal - pt'
+        'Romania - ro'
+        'Slovakia - sk'
+        'Spain - es'
+        'Sweden - se'
+        'United Kingdom (Pre-Brexit) - gb'
+        'United Kingdom (Post-Brexit) - gb*'
+        'Ukraine - ua'
+      )
+      ItemHeight = 15
+      OnClick = lbCountriesClick
+      TabOrder = 0
+    end
+    object btnDownload: TButton
+      AnchorSideLeft.Control = pnlCountries
+      AnchorSideBottom.Control = pnlCountries
+      AnchorSideBottom.Side = asrBottom
+      Left = 0
+      Height = 25
+      Top = 344
+      Width = 129
+      Anchors = [akLeft, akBottom]
+      AutoSize = True
+      BorderSpacing.Top = 6
+      Caption = 'Download / Update'
+      OnClick = btnDownloadClick
+      TabOrder = 1
+    end
+  end
+  object Splitter: TSplitter
+    Left = 179
+    Height = 381
+    Top = 0
+    Width = 5
+    ResizeStyle = rsPattern
+  end
+  object pnlData: TPanel
+    Left = 184
+    Height = 381
+    Top = 0
+    Width = 603
+    Align = alClient
+    BevelOuter = bvNone
+    ClientHeight = 381
+    ClientWidth = 603
+    TabOrder = 3
+    object Chart1: TChart
+      AnchorSideLeft.Control = pnlData
+      AnchorSideTop.Control = pnlData
+      AnchorSideRight.Control = pnlData
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = Bevel1
+      Left = 0
+      Height = 185
+      Top = 0
+      Width = 603
+      AxisList = <      
+        item
+          Grid.Color = clBtnFace
+          Grid.Style = psSolid
+          LabelSize = 25
+          Marks.LabelBrush.Style = bsClear
+          Minors = <>
+          Range.Max = 100
+          Range.UseMax = True
+          Range.UseMin = True
+          Title.Alignment = taCenter
+          Title.LabelFont.Orientation = 900
+          Title.Visible = True
+          Title.Caption = 'Fill level'#13#10'(%)'
+          Title.LabelBrush.Style = bsClear
+        end      
+        item
+          Grid.Color = clBtnFace
+          Grid.Style = psSolid
+          Alignment = calBottom
+          Marks.Format = '%2:s'
+          Marks.LabelBrush.Style = bsClear
+          Marks.Source = DateTimeIntervalChartSource
+          Marks.Style = smsLabel
+          Minors = <>
+          Title.LabelBrush.Style = bsClear
+        end      
+        item
+          Alignment = calRight
+          Marks.Visible = False
+          Marks.LabelBrush.Style = bsClear
+          Minors = <>
+          Title.Visible = True
+          Title.Caption = '  '
+          Title.LabelBrush.Style = bsClear
+        end>
+      Margins.Left = 1
+      Margins.Right = 1
+      Margins.Bottom = 1
+      Title.Font.Style = [fsBold]
+      Title.Text.Strings = (
+        '    '
+      )
+      Title.Visible = True
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      object Chart1AreaSeries1: TAreaSeries
+        AreaBrush.Color = clSkyBlue
+        AreaLinesPen.Color = clBlue
+        AreaLinesPen.Style = psClear
+        Source = FillPercentSource
+      end
+    end
+    object Chart2: TChart
+      AnchorSideLeft.Control = pnlData
+      AnchorSideTop.Control = Bevel1
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = pnlData
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = pnlData
+      AnchorSideBottom.Side = asrBottom
+      Left = 0
+      Height = 185
+      Top = 196
+      Width = 603
+      AxisList = <      
+        item
+          Grid.Color = clBtnFace
+          Grid.Style = psSolid
+          LabelSize = 25
+          Marks.LabelBrush.Style = bsClear
+          Minors = <>
+          Title.Alignment = taCenter
+          Title.LabelFont.Orientation = 900
+          Title.Visible = True
+          Title.Caption = '<font color="#008800">Injection</font>, <font color="red">Withdrawal</red>'#13#10'(GWh/day)'
+          Title.LabelBrush.Style = bsClear
+          Title.TextFormat = tfHTML
+        end      
+        item
+          Grid.Color = clBtnFace
+          Grid.Style = psSolid
+          Alignment = calBottom
+          Marks.Format = '%2:s'
+          Marks.LabelBrush.Style = bsClear
+          Marks.Source = DateTimeIntervalChartSource
+          Marks.Style = smsLabel
+          Minors = <>
+          Title.Visible = True
+          Title.Caption = 'Date'
+          Title.LabelBrush.Style = bsClear
+        end      
+        item
+          Alignment = calRight
+          Marks.Visible = False
+          Marks.LabelBrush.Style = bsClear
+          Minors = <>
+          Title.Visible = True
+          Title.Caption = '  '
+          Title.LabelBrush.Style = bsClear
+        end>
+      Margins.Left = 1
+      Margins.Right = 1
+      Margins.Bottom = 1
+      Title.Text.Strings = (
+        'TAChart'
+      )
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      object InjectionSeries: TLineSeries
+        LinePen.Color = clGreen
+        Source = InjectionSource
+      end
+      object WithdrawalSeries: TLineSeries
+        LinePen.Color = clRed
+        Source = WithdrawalSource
+      end
+    end
+    object Bevel1: TBevel
+      AnchorSideTop.Control = pnlData
+      AnchorSideTop.Side = asrCenter
+      Left = 163
+      Height = 11
+      Top = 185
+      Width = 50
+      Shape = bsSpacer
+    end
+  end
+  object DateTimeIntervalChartSource: TDateTimeIntervalChartSource
+    Params.MaxLength = 120
+    Params.MinLength = 30
+    DateTimeStepFormat.MonthFormat = 'mmm yyyy'
+    DateTimeStepFormat.WeekFormat = 'dd/mm/yyyy'
+    DateTimeStepFormat.DayFormat = 'dd/mm/yyyy'
+    SuppressPrevUnit = False
+    OnDateTimeStepChange = DateTimeIntervalChartSourceDateTimeStepChange
+    Left = 400
+    Top = 168
+  end
+  object FillPercentSource: TUserDefinedChartSource
+    OnGetChartDataItem = FillPercentSourceGetChartDataItem
+    Left = 408
+    Top = 53
+  end
+  object ChartExtentLink: TChartExtentLink
+    AlignSides = [calLeft, calRight]
+    LinkedCharts = <    
+      item
+        Chart = Chart1
+      end    
+      item
+        Chart = Chart2
+      end>
+    Mode = elmOnlyX
+    Left = 609
+    Top = 53
+  end
+  object InjectionSource: TUserDefinedChartSource
+    OnGetChartDataItem = InjectionSourceGetChartDataItem
+    Left = 376
+    Top = 263
+  end
+  object WithdrawalSource: TUserDefinedChartSource
+    OnGetChartDataItem = WithdrawalSourceGetChartDataItem
+    Left = 606
+    Top = 263
+  end
+end
