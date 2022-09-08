@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ComCtrls,
   ExtCtrls, TAGraph, TAIntervalSources, TASources, TASeries, gData,
-  TACustomSource, TAChartExtentLink;
+  TACustomSource, TAChartExtentLink, TATools, TADrawUtils, Types;
 
 type
 
@@ -17,8 +17,16 @@ type
     Bevel1: TBevel;
     btnDownload: TButton;
     Chart1: TChart;
-    Chart1AreaSeries1: TAreaSeries;
+    FillLevelSeries: TAreaSeries;
     Chart2: TChart;
+    ChartToolset1: TChartToolset;
+    ChartToolset1DataPointCrosshairTool1: TDataPointCrosshairTool;
+    ChartToolset1DataPointCrosshairTool2: TDataPointCrosshairTool;
+    ChartToolset1PanDragTool1: TPanDragTool;
+    ChartToolset1PanDragTool2: TPanDragTool;
+    ChartToolset1ZoomDragTool1: TZoomDragTool;
+    ChartToolset1ZoomDragTool2: TZoomDragTool;
+    ChartToolset2: TChartToolset;
     InjectionSeries: TLineSeries;
     WithdrawalSeries: TLineSeries;
     ChartExtentLink: TChartExtentLink;
@@ -32,6 +40,8 @@ type
     InjectionSource: TUserDefinedChartSource;
     WithdrawalSource: TUserDefinedChartSource;
     procedure btnDownloadClick(Sender: TObject);
+    procedure ChartToolset1DataPointCrosshairTool1Draw(
+      ASender: TDataPointDrawTool);
     procedure DateTimeIntervalChartSourceDateTimeStepChange(Sender: TObject;
       ASteps: TDateTimeStep);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -70,6 +80,7 @@ implementation
 
 uses
   LCLIntf, LCLType, StrUtils, IniFiles, LazFileUtils,
+  TACustomSeries,
   gUtils;
 
 const
@@ -164,6 +175,32 @@ begin
     StatusBar.Panels[1].Text := 'Stored as "' + FData.FileName + '"';
   end else
     StatusBar.Panels[1].Text := '';
+end;
+
+procedure TMainForm.ChartToolset1DataPointCrosshairTool1Draw(
+  ASender: TDataPointDrawTool);
+var
+  sDate: String;
+  sFillLevelValue: String;
+  sInjectionValue: String;
+  sWithdrawalValue: String;
+  idx: Integer;
+begin
+  if (ASender = nil) or (ASender.Series = nil) then
+    exit;
+  idx := ASender.PointIndex;
+  if idx = -1 then
+    exit;
+  sDate := DateToStr(FillLevelSeries.XValue[ASender.PointIndex]);
+  sFillLevelValue := FormatFloat('0.00', FillLevelSeries.YValue[idx]) + ' %';
+  sInjectionValue := FormatFloat('0.00', InjectionSeries.YValue[idx]) + ' GWh/day';
+  sWithdrawalValue := FormatFloat('0.00', WithdrawalSeries.YValue[idx]) + ' GWh/day';
+  Statusbar.Panels[1].Text := Format('Date: %s - %s = %s, %s = %s, %s = %s', [
+    sDate,
+    'Fill level', sFillLevelValue,
+    'Injection', sInjectionValue,
+    'Withdrawal', sWithdrawalValue
+  ]);
 end;
 
 procedure TMainForm.DateTimeIntervalChartSourceDateTimeStepChange(

@@ -9,7 +9,6 @@ object MainForm: TMainForm
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  LCLVersion = '2.3.0.0'
   object StatusBar: TStatusBar
     Left = 0
     Height = 23
@@ -164,8 +163,10 @@ object MainForm: TMainForm
         '    '
       )
       Title.Visible = True
+      Toolset = ChartToolset1
       Anchors = [akTop, akLeft, akRight, akBottom]
-      object Chart1AreaSeries1: TAreaSeries
+      object FillLevelSeries: TAreaSeries
+        Title = 'Fill level'
         AreaBrush.Color = clSkyBlue
         AreaLinesPen.Color = clBlue
         AreaLinesPen.Style = psClear
@@ -226,12 +227,15 @@ object MainForm: TMainForm
       Title.Text.Strings = (
         'TAChart'
       )
+      Toolset = ChartToolset2
       Anchors = [akTop, akLeft, akRight, akBottom]
       object InjectionSeries: TLineSeries
+        Title = 'Injection'
         LinePen.Color = clGreen
         Source = InjectionSource
       end
       object WithdrawalSeries: TLineSeries
+        Title = 'Withdrawal'
         LinePen.Color = clRed
         Source = WithdrawalSource
       end
@@ -259,7 +263,7 @@ object MainForm: TMainForm
   end
   object FillPercentSource: TUserDefinedChartSource
     OnGetChartDataItem = FillPercentSourceGetChartDataItem
-    Left = 408
+    Left = 424
     Top = 53
   end
   object ChartExtentLink: TChartExtentLink
@@ -277,12 +281,52 @@ object MainForm: TMainForm
   end
   object InjectionSource: TUserDefinedChartSource
     OnGetChartDataItem = InjectionSourceGetChartDataItem
-    Left = 376
+    Left = 424
     Top = 263
   end
   object WithdrawalSource: TUserDefinedChartSource
     OnGetChartDataItem = WithdrawalSourceGetChartDataItem
     Left = 606
     Top = 263
+  end
+  object ChartToolset1: TChartToolset
+    Left = 296
+    Top = 53
+    object ChartToolset1ZoomDragTool1: TZoomDragTool
+      Shift = [ssLeft]
+      LimitToExtent = [zdLeft, zdUp, zdRight, zdDown]
+      Brush.Color = clSilver
+      DrawingMode = tdmNormal
+      Frame.Color = clGray
+      Transparency = 128
+    end
+    object ChartToolset1PanDragTool1: TPanDragTool
+      Shift = [ssRight]
+      LimitToExtent = [pdLeft, pdUp, pdRight, pdDown]
+    end
+    object ChartToolset1DataPointCrosshairTool1: TDataPointCrosshairTool
+      OnDraw = ChartToolset1DataPointCrosshairTool1Draw
+      Size = 16
+    end
+  end
+  object ChartToolset2: TChartToolset
+    Left = 296
+    Top = 263
+    object ChartToolset1ZoomDragTool2: TZoomDragTool
+      Shift = [ssLeft]
+      LimitToExtent = [zdLeft, zdUp, zdRight, zdDown]
+      Brush.Color = clSilver
+      DrawingMode = tdmNormal
+      Frame.Color = clGray
+      Transparency = 128
+    end
+    object ChartToolset1PanDragTool2: TPanDragTool
+      Shift = [ssRight]
+      LimitToExtent = [pdLeft, pdUp, pdRight, pdDown]
+    end
+    object ChartToolset1DataPointCrosshairTool2: TDataPointCrosshairTool
+      OnDraw = ChartToolset1DataPointCrosshairTool1Draw
+      Size = 16
+    end
   end
 end
