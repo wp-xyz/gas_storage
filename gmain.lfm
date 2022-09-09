@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 327
+  Left = 416
   Height = 404
-  Top = 130
+  Top = 139
   Width = 787
   Caption = 'European Gas Storage'
   ClientHeight = 404
@@ -9,6 +9,7 @@ object MainForm: TMainForm
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  LCLVersion = '2.3.0.0'
   object StatusBar: TStatusBar
     Left = 0
     Height = 23
@@ -132,8 +133,9 @@ object MainForm: TMainForm
           Title.Alignment = taCenter
           Title.LabelFont.Orientation = 900
           Title.Visible = True
-          Title.Caption = 'Fill level'#13#10'(%)'
+          Title.Caption = '<b>Fill level</b>'#13#10'(%)'
           Title.LabelBrush.Style = bsClear
+          Title.TextFormat = tfHTML
         end      
         item
           Grid.Color = clBtnFace
@@ -195,7 +197,7 @@ object MainForm: TMainForm
           Title.Alignment = taCenter
           Title.LabelFont.Orientation = 900
           Title.Visible = True
-          Title.Caption = '<font color="#008800">Injection</font>, <font color="red">Withdrawal</red>'#13#10'(GWh/day)'
+          Title.Caption = '<b><font color="#008800">Injection</font>, <font color="red">Withdrawal</red></b>'#13#10'(GWh/day)'
           Title.LabelBrush.Style = bsClear
           Title.TextFormat = tfHTML
         end      
@@ -208,6 +210,7 @@ object MainForm: TMainForm
           Marks.Source = DateTimeIntervalChartSource
           Marks.Style = smsLabel
           Minors = <>
+          Title.LabelFont.Style = [fsBold]
           Title.Visible = True
           Title.Caption = 'Date'
           Title.LabelBrush.Style = bsClear
@@ -258,12 +261,12 @@ object MainForm: TMainForm
     DateTimeStepFormat.DayFormat = 'dd/mm/yyyy'
     SuppressPrevUnit = False
     OnDateTimeStepChange = DateTimeIntervalChartSourceDateTimeStepChange
-    Left = 400
+    Left = 440
     Top = 168
   end
   object FillPercentSource: TUserDefinedChartSource
-    OnGetChartDataItem = FillPercentSourceGetChartDataItem
-    Left = 424
+    OnGetChartDataItem = ChartSourceGetChartDataItem
+    Left = 440
     Top = 53
   end
   object ChartExtentLink: TChartExtentLink
@@ -280,12 +283,12 @@ object MainForm: TMainForm
     Top = 53
   end
   object InjectionSource: TUserDefinedChartSource
-    OnGetChartDataItem = InjectionSourceGetChartDataItem
-    Left = 424
+    OnGetChartDataItem = ChartSourceGetChartDataItem
+    Left = 440
     Top = 263
   end
   object WithdrawalSource: TUserDefinedChartSource
-    OnGetChartDataItem = WithdrawalSourceGetChartDataItem
+    OnGetChartDataItem = ChartSourceGetChartDataItem
     Left = 606
     Top = 263
   end

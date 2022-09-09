@@ -47,13 +47,9 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure FillPercentSourceGetChartDataItem(ASource: TUserDefinedChartSource;
-      AIndex: Integer; var AItem: TChartDataItem);
-    procedure InjectionSourceGetChartDataItem(ASource: TUserDefinedChartSource;
+    procedure ChartSourceGetChartDataItem(ASource: TUserDefinedChartSource;
       AIndex: Integer; var AItem: TChartDataItem);
     procedure lbCountriesClick(Sender: TObject);
-    procedure WithdrawalSourceGetChartDataItem(ASource: TUserDefinedChartSource;
-      AIndex: Integer; var AItem: TChartDataItem);
   private
     FData: TGasData;
     FApiKey: String;
@@ -146,6 +142,8 @@ begin
     try
       if Download(url, FApiKey, stream, err) then
       begin
+        tmemorystream(stream).SaveToFile('output.json');
+        stream.Position := 0;
         FData.LoadFromJSON(stream, err);
         if err <> '' then
         begin
@@ -293,33 +291,20 @@ begin
   end;
 end;
 
-procedure TMainForm.FillPercentSourceGetChartDataItem(
+procedure TMainForm.ChartSourceGetChartDataItem(
   ASource: TUserDefinedChartSource; AIndex: Integer; var AItem: TChartDataItem);
 begin
   if (FData <> nil) and (AIndex < FData.Count) then
   begin
     AItem.X := FData.Date[AIndex];
-    AItem.Y := FData.PercentFull[AIndex];
-  end;
-end;
-
-procedure TMainForm.InjectionSourceGetChartDataItem(
-  ASource: TUserDefinedChartSource; AIndex: Integer; var AItem: TChartDataItem);
-begin
-  if (FData <> nil) and (AIndex < FData.Count) then
-  begin
-    AItem.X := FData.Date[AIndex];
-    AItem.Y := FData.Injection[AIndex];
-  end;
-end;
-
-procedure TMainForm.WithdrawalSourceGetChartDataItem(
-  ASource: TUserDefinedChartSource; AIndex: Integer; var AItem: TChartDataItem);
-begin
-  if (FData <> nil) and (AIndex < FData.Count) then
-  begin
-    AItem.X := FData.Date[AIndex];
-    AItem.Y := FData.Withdrawal[AIndex];
+    if ASource = FillPercentSource then
+      AItem.Y := FData.PercentFull[AIndex]
+    else if ASource = InjectionSource then
+      AItem.Y := FData.Injection[AIndex]
+    else if ASource = WithdrawalSource then
+      AItem.Y := FData.Withdrawal[AIndex]
+    else
+      raise Exception.Create('Unknown chart source.');
   end;
 end;
 
