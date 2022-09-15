@@ -5,9 +5,10 @@ unit gMain;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ComCtrls,
-  ExtCtrls, Buttons, TAGraph, TAIntervalSources, TASources, TASeries, gData,
-  TACustomSource, TAChartExtentLink, TATools, TADrawUtils, Types;
+  Classes, SysUtils, Forms, Controls, Types, Graphics, Dialogs,
+  StdCtrls, ComCtrls, ExtCtrls, Buttons,
+  TAGraph, TAIntervalSources, TASources, TASeries, TACustomSource,
+  TAChartExtentLink, TATools, gData;
 
 type
 
@@ -62,9 +63,9 @@ type
     function GetCountryCode(AIndex: Integer): String;
     function GetCountryName(AIndex: Integer): String;
     procedure SetCountryCode(ACountryCode: String);
+    procedure StoreAPIKey;
     procedure ReadIni;
     procedure WriteIni;
-    procedure StoreAPIKey;
     procedure UpdateSeries;
 
   public
@@ -151,8 +152,6 @@ begin
     try
       if Download(url, FApiKey, stream, err) then
       begin
-        tmemorystream(stream).SaveToFile('output.json');
-        stream.Position := 0;
         FData.LoadFromJSON(stream, err);
         if err <> '' then
         begin
