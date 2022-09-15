@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ComCtrls,
-  ExtCtrls, TAGraph, TAIntervalSources, TASources, TASeries, gData,
+  ExtCtrls, Buttons, TAGraph, TAIntervalSources, TASources, TASeries, gData,
   TACustomSource, TAChartExtentLink, TATools, TADrawUtils, Types;
 
 type
@@ -27,7 +27,9 @@ type
     ChartToolset1ZoomDragTool1: TZoomDragTool;
     ChartToolset1ZoomDragTool2: TZoomDragTool;
     ChartToolset2: TChartToolset;
+    ImageList: TImageList;
     InjectionSeries: TLineSeries;
+    btnAbout: TSpeedButton;
     WithdrawalSeries: TLineSeries;
     ChartExtentLink: TChartExtentLink;
     DateTimeIntervalChartSource: TDateTimeIntervalChartSource;
@@ -39,11 +41,13 @@ type
     FillPercentSource: TUserDefinedChartSource;
     InjectionSource: TUserDefinedChartSource;
     WithdrawalSource: TUserDefinedChartSource;
+    procedure btnAboutClick(Sender: TObject);
     procedure btnDownloadClick(Sender: TObject);
     procedure ChartToolset1DataPointCrosshairTool1Draw(
       ASender: TDataPointDrawTool);
     procedure DateTimeIntervalChartSourceDateTimeStepChange(Sender: TObject;
       ASteps: TDateTimeStep);
+    procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -77,13 +81,18 @@ implementation
 uses
   LCLIntf, LCLType, StrUtils, IniFiles, LazFileUtils,
   TACustomSeries,
-  gUtils;
+  gUtils, gAbout;
 
 const
   BASE_URL = 'https://agsi.gie.eu/api';
   SIZE = 300;
 
 { TMainForm }
+
+procedure TMainForm.btnAboutClick(Sender: TObject);
+begin
+  ShowAbout;
+end;
 
 { Download from the GIE AGSI site requires an API key which can be obtained
   for free after registration at https://agsi.gie.eu/account.
@@ -213,6 +222,11 @@ begin
     DateTimeIntervalChartSource.Params.MaxLength := 150
   else
     DateTimeIntervalChartSource.Params.MaxLength := 80;
+end;
+
+procedure TMainForm.FormActivate(Sender: TObject);
+begin
+  pnlCountries.Constraints.MinWidth := btnAbout.Left + btnAbout.Width;
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: Boolean);

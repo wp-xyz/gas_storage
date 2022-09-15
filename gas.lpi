@@ -55,6 +55,13 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="gUtils"/>
       </Unit>
+      <Unit>
+        <Filename Value="gabout.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="AboutForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="gAbout"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
