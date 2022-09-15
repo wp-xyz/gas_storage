@@ -1,13 +1,14 @@
 object AboutForm: TAboutForm
   Left = 327
-  Height = 242
+  Height = 286
   Top = 130
   Width = 265
   AutoSize = True
   Caption = 'About GAS'
-  ClientHeight = 242
+  ClientHeight = 286
   ClientWidth = 265
   OnShow = FormShow
+  ShowHint = True
   object AppImage: TImage
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -49,24 +50,26 @@ object AboutForm: TAboutForm
   end
   object lblDataSource: TLabel
     AnchorSideLeft.Control = AppImage
-    AnchorSideTop.Control = AppImage
+    AnchorSideTop.Control = edDataDirectory
     AnchorSideTop.Side = asrBottom
     Left = 8
     Height = 15
-    Top = 144
+    Top = 192
     Width = 93
+    BorderSpacing.Top = 8
     Caption = 'Data provided by:'
   end
   object infoDataSource: TLabel
     AnchorSideLeft.Control = lblDataSource
+    AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = lblDataSource
-    AnchorSideTop.Side = asrBottom
-    Left = 20
+    Left = 117
     Height = 15
-    Top = 159
-    Width = 157
-    BorderSpacing.Left = 12
-    Caption = 'GIE AGSI (https://agsi.gie.eu/)'
+    Hint = 'https://agsi.gie.eu/'
+    Top = 192
+    Width = 45
+    BorderSpacing.Left = 16
+    Caption = 'GIE AGSI'
     Color = clBlue
     Font.Color = clBlue
     ParentColor = False
@@ -77,23 +80,23 @@ object AboutForm: TAboutForm
   end
   object lblImageSource: TLabel
     AnchorSideLeft.Control = AppImage
-    AnchorSideTop.Control = infoDataSource
+    AnchorSideTop.Control = lblDataSource
     AnchorSideTop.Side = asrBottom
     Left = 8
     Height = 15
-    Top = 182
-    Width = 169
-    BorderSpacing.Top = 8
-    Caption = 'Icons provided by: Roland Hahn'
+    Top = 211
+    Width = 97
+    BorderSpacing.Top = 4
+    Caption = 'Icons provided by:'
   end
   object btnClose: TBitBtn
     AnchorSideLeft.Control = Owner
     AnchorSideLeft.Side = asrCenter
-    AnchorSideTop.Control = lblImageSource
+    AnchorSideTop.Control = Bevel1
     AnchorSideTop.Side = asrBottom
     Left = 95
     Height = 25
-    Top = 209
+    Top = 253
     Width = 75
     BorderSpacing.Top = 12
     BorderSpacing.Bottom = 8
@@ -103,5 +106,61 @@ object AboutForm: TAboutForm
     ModalResult = 1
     Spacing = 8
     TabOrder = 0
+  end
+  object lblDataDirectory: TLabel
+    AnchorSideLeft.Control = AppImage
+    AnchorSideTop.Control = AppImage
+    AnchorSideTop.Side = asrBottom
+    Left = 8
+    Height = 15
+    Top = 144
+    Width = 77
+    Caption = 'Data directory:'
+  end
+  object edDataDirectory: TDirectoryEdit
+    AnchorSideLeft.Control = AppImage
+    AnchorSideTop.Control = lblDataDirectory
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 8
+    Height = 23
+    Top = 161
+    Width = 249
+    ShowHidden = False
+    ButtonWidth = 23
+    NumGlyphs = 1
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 8
+    MaxLength = 0
+    TabOrder = 1
+  end
+  object Bevel1: TBevel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = lblImageSource
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 8
+    Height = 3
+    Top = 238
+    Width = 249
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 8
+    BorderSpacing.Top = 12
+    BorderSpacing.Right = 8
+    Shape = bsTopLine
+  end
+  object infoImageSource: TLabel
+    AnchorSideLeft.Control = infoDataSource
+    AnchorSideTop.Control = lblDataSource
+    AnchorSideTop.Side = asrBottom
+    Left = 117
+    Height = 15
+    Top = 211
+    Width = 69
+    BorderSpacing.Top = 4
+    Caption = 'Roland Hahn'
   end
 end

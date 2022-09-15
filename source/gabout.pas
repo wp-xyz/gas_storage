@@ -6,20 +6,24 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
-  Buttons;
+  Buttons, EditBtn;
 
 type
 
   { TAboutForm }
 
   TAboutForm = class(TForm)
+    Bevel1: TBevel;
     btnClose: TBitBtn;
     AppImage: TImage;
+    edDataDirectory: TDirectoryEdit;
     Label1: TLabel;
     Label2: TLabel;
     infoDataSource: TLabel;
+    lblDataDirectory: TLabel;
     lblImageSource: TLabel;
     lblDataSource: TLabel;
+    infoImageSource: TLabel;
     procedure FormShow(Sender: TObject);
     procedure infoDataSourceClick(Sender: TObject);
     procedure infoDataSourceMouseEnter(Sender: TObject);
@@ -40,7 +44,8 @@ implementation
 {$R *.lfm}
 
 uses
-  Types, LCLIntf;
+  Types, LCLIntf,
+  gUtils;
 
 procedure ShowAbout;
 var
@@ -49,7 +54,12 @@ begin
   F := TAboutForm.Create(nil);
   try
     F.Position := poMainFormCenter;
-    F.ShowModal;
+    F.edDataDirectory.Directory := App_DataDirectory;
+    if F.ShowModal = mrOK then
+    begin
+      App_DataDirectory := F.edDataDirectory.Directory;
+      ForceDirectories(App_DataDirectory);
+    end;
   finally
     F.Free;
   end;

@@ -16,6 +16,7 @@ function StrToNumber(Str: String): Double;
 
 var
   App_FormatSettings: TFormatSettings;
+  App_DataDirectory: String = '';
 
 implementation
 

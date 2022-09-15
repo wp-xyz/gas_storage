@@ -16,7 +16,7 @@ type
 
   TMainForm = class(TForm)
     Bevel1: TBevel;
-    btnDownload: TButton;
+    btnDownload: TBitBtn;
     Chart1: TChart;
     FillLevelSeries: TAreaSeries;
     Chart2: TChart;
@@ -59,7 +59,6 @@ type
     FData: TGasData;
     FApiKey: String;
     FCountryCode: String;
-    FDataDir: String;
     function GetCountryCode(AIndex: Integer): String;
     function GetCountryName(AIndex: Integer): String;
     procedure SetCountryCode(ACountryCode: String);
@@ -123,7 +122,7 @@ begin
 
   FCountryCode := GetCountryCode(lbCountries.ItemIndex);
   FreeAndNil(FData);
-  FData := TGasData.Create(FDataDir, FCountryCode);
+  FData := TGasData.Create(App_DataDirectory, FCountryCode);
   if FData.Count > 0 then
     startDate := FData.Date[FData.Count-1] - 1
   else
@@ -241,12 +240,13 @@ procedure TMainForm.FormCreate(Sender: TObject);
 begin
   cInputQueryEditSizePercents := 0;
   StatusBar.Panels[0].Text := 'Data source: GIE AGSI (https://agsi.gie.eu/)';
-  //FDataDir := GetAppConfigDir(true);
-  FDataDir := Application.Location + AppendPathDelim('data');
-  ForceDirectories(FDataDir);
 
+  App_DataDirectory := Application.Location + AppendPathDelim('data');
   ReadIni;
+  ForceDirectories(App_DataDirectory);
+
   lbCountriesClick(nil);
+  btnAbout.Width := btnAbout.Height;
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
@@ -281,7 +281,7 @@ begin
   begin
     FreeAndNil(FData);
     FCountryCode := GetCountryCode(lbCountries.ItemIndex);
-    FData := TGasData.Create(FDataDir, FCountryCode);
+    FData := TGasData.Create(App_DataDirectory, FCountryCode);
     UpdateSeries;
     Statusbar.Panels[1].Text := Format('File "%s" loaded, %d data points', [FData.FileName, FData.Count]);
   end;
@@ -347,6 +347,8 @@ begin
     pnlCountries.Width := ini.ReadInteger('MainForm', 'Countries_Width', pnlCountries.Width);
     FApiKey := ini.ReadString('Settings', 'API_Key', FApiKey);
     SetCountryCode(ini.ReadString('Settings', 'Country', FCountryCode));
+    App_DataDirectory := ini.ReadString('Settings', 'DataDirectory', App_DataDirectory);
+
   finally
     ini.Free;
   end;
