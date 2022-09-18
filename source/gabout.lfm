@@ -65,7 +65,6 @@ object AboutForm: TAboutForm
     AnchorSideTop.Control = lblDataSource
     Left = 117
     Height = 15
-    Hint = 'https://agsi.gie.eu/'
     Top = 192
     Width = 45
     BorderSpacing.Left = 16
@@ -74,9 +73,9 @@ object AboutForm: TAboutForm
     Font.Color = clBlue
     ParentColor = False
     ParentFont = False
-    OnClick = infoDataSourceClick
-    OnMouseEnter = infoDataSourceMouseEnter
-    OnMouseLeave = infoDataSourceMouseLeave
+    OnClick = LinkClick
+    OnMouseEnter = LinkMouseEnter
+    OnMouseLeave = LinkMouseLeave
   end
   object lblImageSource: TLabel
     AnchorSideLeft.Control = AppImage
@@ -162,5 +161,10 @@ object AboutForm: TAboutForm
     Width = 69
     BorderSpacing.Top = 4
     Caption = 'Roland Hahn'
+    Font.Color = clBlue
+    ParentFont = False
+    OnClick = LinkClick
+    OnMouseEnter = LinkMouseEnter
+    OnMouseLeave = LinkMouseLeave
   end
 end

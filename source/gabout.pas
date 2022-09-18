@@ -25,9 +25,9 @@ type
     lblDataSource: TLabel;
     infoImageSource: TLabel;
     procedure FormShow(Sender: TObject);
-    procedure infoDataSourceClick(Sender: TObject);
-    procedure infoDataSourceMouseEnter(Sender: TObject);
-    procedure infoDataSourceMouseLeave(Sender: TObject);
+    procedure LinkClick(Sender: TObject);
+    procedure LinkMouseEnter(Sender: TObject);
+    procedure LinkMouseLeave(Sender: TObject);
   private
 
   public
@@ -46,6 +46,10 @@ implementation
 uses
   Types, LCLIntf,
   gUtils;
+
+const
+  DATASOURCE_LINK = 'https://agsi.gie.eu';
+  ROLAND_HAHN_LINK = 'https://www.rhsoft.de';
 
 procedure ShowAbout;
 var
@@ -70,24 +74,30 @@ end;
 
 procedure TAboutForm.FormShow(Sender: TObject);
 begin
+  infoDataSource.Hint := DATASOURCE_LINK;
+  infoImageSource.Hint := ROLAND_HAHN_LINK;
+
   AppImage.Picture.Icon := Application.Icon;
   AppImage.Stretch := true;
   AppImage.Picture.Icon.Current := AppImage.Picture.Icon.GetBestIndexForSize(Size(256, 256));
 end;
 
-procedure TAboutForm.infoDataSourceClick(Sender: TObject);
+procedure TAboutForm.LinkClick(Sender: TObject);
+var
+  url: String;
 begin
-  OpenURL('https://agsi.gie.eu/');
+  url := TLabel(Sender).Hint;
+  OpenURL(url);
 end;
 
-procedure TAboutForm.infoDataSourceMouseEnter(Sender: TObject);
+procedure TAboutForm.LinkMouseEnter(Sender: TObject);
 begin
-  infoDataSource.Font.Style := [fsUnderline];
+  TControl(Sender).Font.Style := [fsUnderline];
 end;
 
-procedure TAboutForm.infoDataSourceMouseLeave(Sender: TObject);
+procedure TAboutForm.LinkMouseLeave(Sender: TObject);
 begin
-  infoDataSource.Font.Style := [];
+  TControl(Sender).Font.Style := [];
 end;
 
 end.
