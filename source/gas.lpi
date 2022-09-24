@@ -21,7 +21,7 @@
           <Version Value="11"/>
           <PathDelim Value="\"/>
           <Target>
-            <Filename Value="..\gas"/>
+            <Filename Value="..\bin\$(TargetCPU)-$(TargetOS)\gas"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -60,7 +60,7 @@
           <Version Value="11"/>
           <PathDelim Value="\"/>
           <Target>
-            <Filename Value="..\gas.exe"/>
+            <Filename Value="..\bin\$(TargetCPU)-$(TargetOS)\gas"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -91,7 +91,7 @@
           <Version Value="11"/>
           <PathDelim Value="\"/>
           <Target>
-            <Filename Value="..\gas"/>
+            <Filename Value="..\bin\$(TargetCPU)-$(TargetOS)\gas"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
@@ -179,7 +179,7 @@
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <Target>
-      <Filename Value="..\gas"/>
+      <Filename Value="..\bin\$(TargetCPU)-$(TargetOS)\gas"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>

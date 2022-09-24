@@ -382,6 +382,7 @@ begin
     ini.WriteInteger('MainForm', 'Countries_Width', pnlCountries.Width);
     ini.WriteString('Settings', 'Country', FCountryCode);
     ini.WriteString('Settings', 'API_Key', FApiKey);
+    ini.WriteString('Settings', 'DataDirectory', App_DataDirectory);
   finally
     ini.Free;
   end;
