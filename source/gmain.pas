@@ -59,6 +59,7 @@ type
     FData: TGasData;
     FApiKey: String;
     FCountryCode: String;
+    procedure DownloadCountry(ACountryIndex: Integer; var ErrorMsg: String);
     function GetCountryCode(AIndex: Integer): String;
     function GetCountryName(AIndex: Integer): String;
     procedure SetCountryCode(ACountryCode: String);
@@ -100,13 +101,8 @@ end;
   in section "Settings" under key "ApiKey". }
 procedure TMainForm.btnDownloadClick(Sender: TObject);
 var
-  stream: TStream;
-  s, url: String;
-  err: String = '';
-  startDate, endDate: TDate;
-  fromDateStr: String;
-  toDateStr: String;
-  n: Integer;
+  err: String;
+  i: Integer;
   store_API_Key: Boolean = false;
 begin
   if FApiKey = '' then begin
@@ -120,66 +116,88 @@ begin
     store_API_Key := true;
   end;
 
-  FCountryCode := GetCountryCode(lbCountries.ItemIndex);
-  FreeAndNil(FData);
-  FData := TGasData.Create(App_DataDirectory, FCountryCode);
-  if FData.Count > 0 then
-    startDate := FData.Date[FData.Count-1] - 1
-  else
-  if FCountryCode = 'gb*' then  // UK, post-brexit
-    startDate := EncodeDate(2021, 1, 1)
-  else
-    startDate := EncodeDate(2011, 1, 1);
-
-  while (startDate <= Now()) do
-  begin
-    endDate := startDate + SIZE;
-    if endDate > Trunc(Now) then
-      endDate := Trunc(Now);
-    fromDateStr := DateToStr(startDate, App_FormatSettings);
-    toDateStr := DateToStr(endDate, App_FormatSettings);
-    n := trunc(endDate) - trunc(startDate) + 1;
-    url := Format('%s?country=%s&from=%s&to=%s&size=%d', [
-      BASE_URL, FCountryCode, fromDateStr, toDateStr, n
-    ]);
-
-    s := GetCountryName(lbCountries.ItemIndex);
-    StatusBar.Panels[1].Text := Format('%s: Downloading %s - %s...', [s, fromDateStr, toDateStr]);
-    StatusBar.Repaint;
-
-    stream := TMemoryStream.Create;
-    try
-      if Download(url, FApiKey, stream, err) then
-      begin
-        FData.LoadFromJSON(stream, err);
-        if err <> '' then
-        begin
-          FData.Clear;
-          UpdateSeries;
-          StatusBar.Panels[1].Text := '';
-          MessageDlg(err, mtError, [mbOK], 0);
-          exit;
-        end;
-      end else begin
-        StatusBar.Panels[1].Text := '';
-        MessageDlg('Download error:' + LineEnding + err, mtError, [mbOK], 0);
-        exit;
-      end;
-    finally
-      stream.Free;
-    end;
-
-    startDate := startDate + SIZE;
-  end;
+  err := '';
+  for i := 0 to lbCountries.Items.Count-1 do
+    DownloadCountry(i, err);
 
   if err = '' then
   begin
-    FData.Save;
-    UpdateSeries;
+    FreeAndNil(FData);
+    FCountryCode := GetCountryCode(lbCountries.ItemIndex);
+    FData := TGasData.Create(App_DataDirectory, FCountryCode);
     if store_API_Key then StoreAPIKey;
-    StatusBar.Panels[1].Text := 'Stored as "' + FData.FileName + '"';
+    StatusBar.Panels[1].Text := 'Download complete.';
   end else
+  begin
     StatusBar.Panels[1].Text := '';
+    MessageDlg(err, mtError, [mbOK], 0);
+  end;
+end;
+
+procedure TMainForm.DownloadCountry(ACountryIndex: Integer; var ErrorMsg: String);
+var
+  stream: TStream;
+  s, url: String;
+  err: String = '';
+  startDate, endDate: TDate;
+  fromDateStr: String;
+  toDateStr: String;
+  n: Integer;
+
+  countryCode: String;
+  countryName: String;
+  data: TGasData;
+begin
+  countryCode := GetCountryCode(ACountryIndex);
+  countryName := GetCountryName(ACountryIndex);
+  data := TGasData.Create(App_DataDirectory, countryCode);
+  try
+    if data.Count > 0 then
+      startDate := data.Date[data.Count-1] - 1
+    else
+    if countryCode = 'gb*' then  // UK, post-brexit
+      startDate := EncodeDate(2021, 1, 1)
+    else
+      startDate := EncodeDate(2011, 1, 1);
+
+    while (startDate <= Now()) do
+    begin
+      endDate := startDate + SIZE;
+      if endDate > Trunc(Now) then
+        endDate := Trunc(Now);
+      fromDateStr := DateToStr(startDate, App_FormatSettings);
+      toDateStr := DateToStr(endDate, App_FormatSettings);
+      n := trunc(endDate) - trunc(startDate) + 1;
+      url := Format('%s?country=%s&from=%s&to=%s&size=%d', [
+        BASE_URL, countryCode, fromDateStr, toDateStr, n
+      ]);
+
+      StatusBar.Panels[1].Text := Format('Downloading %s: %s - %s...', [countryName, fromDateStr, toDateStr]);
+      StatusBar.Repaint;
+
+      stream := TMemoryStream.Create;
+      try
+        if Download(url, FApiKey, stream, err) then
+          data.LoadFromJSON(stream, err);
+        if err <> '' then
+        begin
+          StatusBar.Panels[1].Text := '';
+          if ErrorMsg = '' then
+            ErrorMsg := err
+          else
+            ErrorMsg := ErrorMsg + LineEnding + err;
+          exit;
+        end;
+      finally
+        stream.Free;
+      end;
+      startDate := startDate + SIZE;
+    end;
+
+    data.Save;
+  finally
+    data.Free;
+  end;
 end;
 
 procedure TMainForm.ChartToolset1DataPointCrosshairTool1Draw(
