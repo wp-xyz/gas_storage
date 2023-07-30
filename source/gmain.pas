@@ -59,6 +59,7 @@ type
     FData: TGasData;
     FApiKey: String;
     FCountryCode: String;
+    FActivated: boolean;
     procedure DownloadCountry(ACountryIndex: Integer; var ErrorMsg: String);
     function GetCountryCode(AIndex: Integer): String;
     function GetCountryName(AIndex: Integer): String;
@@ -242,7 +243,14 @@ end;
 
 procedure TMainForm.FormActivate(Sender: TObject);
 begin
-  pnlCountries.Constraints.MinWidth := btnAbout.Left + btnAbout.Width;
+  if not FActivated then
+  begin
+    FActivated := true;
+    ReadIni;
+    lbCountriesClick(nil);
+    btnAbout.Width := btnAbout.Height;
+    pnlCountries.Constraints.MinWidth := btnAbout.Left + btnAbout.Width;
+  end;
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -260,11 +268,7 @@ begin
   StatusBar.Panels[0].Text := 'Data source: GIE AGSI (https://agsi.gie.eu/)';
 
   App_DataDirectory := Application.Location + AppendPathDelim('data');
-  ReadIni;
   ForceDirectories(App_DataDirectory);
-
-  lbCountriesClick(nil);
-  btnAbout.Width := btnAbout.Height;
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
