@@ -20,7 +20,7 @@ function priv_lazbuild
                 ;;
         esac
     fi
-    if [[ -f 'use/components.txt' ]]; then
+    if [[ -d 'use' ]]; then
         git submodule update --init --recursive
         git submodule update --recursive --remote
         while read -r; do
@@ -39,7 +39,7 @@ function priv_lazbuild
         done < 'use/components.txt'
         find 'use' -type 'f' -name '*.lpk' -exec lazbuild --add-package-link {} +
     fi
-    find 'src' -type 'f' -name '*.lpi' \
+    find 'source' -type 'f' -name '*.lpi' \
         -exec lazbuild --no-write-project --recursive --no-write-project --build-mode=release {} + 1>&2
 )
 
