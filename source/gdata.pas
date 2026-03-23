@@ -53,7 +53,7 @@ type
 implementation
 
 uses
-  math, fpjson, LazFileUtils,
+  math, fpjson, jsonparser, LazFileUtils,
   gUtils;
 
 const

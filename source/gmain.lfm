@@ -6,11 +6,11 @@ object MainForm: TMainForm
   Caption = 'European Gas Storage'
   ClientHeight = 404
   ClientWidth = 787
+  LCLVersion = '4.99.0.0'
   OnActivate = FormActivate
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  LCLVersion = '3.99.0.0'
   object StatusBar: TStatusBar
     Left = 0
     Height = 23
@@ -74,8 +74,9 @@ object MainForm: TMainForm
         'Ukraine - ua'
       )
       ItemHeight = 15
-      OnClick = lbCountriesClick
+      PopupMenu = CountriesPopupMenu
       TabOrder = 0
+      OnClick = lbCountriesClick
     end
     object btnAbout: TSpeedButton
       AnchorSideLeft.Control = btnDownload
@@ -83,7 +84,7 @@ object MainForm: TMainForm
       AnchorSideTop.Control = btnDownload
       AnchorSideBottom.Control = btnDownload
       AnchorSideBottom.Side = asrBottom
-      Left = 151
+      Left = 166
       Height = 26
       Top = 343
       Width = 31
@@ -100,15 +101,15 @@ object MainForm: TMainForm
       Left = 0
       Height = 26
       Top = 343
-      Width = 149
+      Width = 164
       Anchors = [akLeft, akBottom]
       AutoSize = True
       BorderSpacing.Top = 6
-      Caption = 'Download / Update'
+      Caption = 'Download / Update all'
       Images = ImageList
       ImageIndex = 1
-      OnClick = btnDownloadClick
       TabOrder = 1
+      OnClick = btnDownloadClick
     end
   end
   object Splitter: TSplitter
@@ -142,7 +143,7 @@ object MainForm: TMainForm
         item
           Grid.Color = clBtnFace
           Grid.Style = psSolid
-          LabelSize = 25
+          LabelSize = 29
           Marks.LabelBrush.Style = bsClear
           Minors = <>
           Range.Max = 100
@@ -168,6 +169,7 @@ object MainForm: TMainForm
         end      
         item
           Alignment = calRight
+          LabelSize = 4
           Marks.Visible = False
           Marks.LabelBrush.Style = bsClear
           Minors = <>
@@ -209,7 +211,7 @@ object MainForm: TMainForm
         item
           Grid.Color = clBtnFace
           Grid.Style = psSolid
-          LabelSize = 25
+          LabelSize = 29
           Marks.LabelBrush.Style = bsClear
           Minors = <>
           Title.Alignment = taCenter
@@ -235,6 +237,7 @@ object MainForm: TMainForm
         end      
         item
           Alignment = calRight
+          LabelSize = 4
           Marks.Visible = False
           Marks.LabelBrush.Style = bsClear
           Minors = <>
@@ -497,5 +500,13 @@ object MainForm: TMainForm
       D9B209D944EBFF6BF3FF8FFAAF6B12E7E9B8E76FA07BC054B0333333C37F0232
       B8362F
     }
+  end
+  object CountriesPopupMenu: TPopupMenu
+    Left = 128
+    Top = 144
+    object mnuUpdateCountry: TMenuItem
+      Caption = 'Update this country'
+      OnClick = mnuUpdateCountryClick
+    end
   end
 end

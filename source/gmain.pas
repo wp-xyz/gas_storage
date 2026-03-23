@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Types, Graphics, Dialogs,
-  StdCtrls, ComCtrls, ExtCtrls, Buttons,
+  StdCtrls, ComCtrls, ExtCtrls, Buttons, ActnList, Menus,
   TAGraph, TAIntervalSources, TASources, TASeries, TACustomSource,
   TAChartExtentLink, TATools, gData;
 
@@ -31,6 +31,8 @@ type
     ImageList: TImageList;
     InjectionSeries: TLineSeries;
     btnAbout: TSpeedButton;
+    mnuUpdateCountry: TMenuItem;
+    CountriesPopupMenu: TPopupMenu;
     WithdrawalSeries: TLineSeries;
     ChartExtentLink: TChartExtentLink;
     DateTimeIntervalChartSource: TDateTimeIntervalChartSource;
@@ -55,6 +57,7 @@ type
     procedure ChartSourceGetChartDataItem(ASource: TUserDefinedChartSource;
       AIndex: Integer; var AItem: TChartDataItem);
     procedure lbCountriesClick(Sender: TObject);
+    procedure mnuUpdateCountryClick(Sender: TObject);
   private
     FData: TGasData;
     FApiKey: String;
@@ -250,6 +253,8 @@ begin
     lbCountriesClick(nil);
     btnAbout.Width := btnAbout.Height;
     pnlCountries.Constraints.MinWidth := btnAbout.Left + btnAbout.Width;
+    if pnlCountries.Width < pnlCountries.Constraints.MinWidth then
+      pnlCountries.Width := 0;
   end;
 end;
 
@@ -306,6 +311,40 @@ begin
     FData := TGasData.Create(App_DataDirectory, FCountryCode);
     UpdateSeries;
     Statusbar.Panels[1].Text := Format('File "%s" loaded, %d data points', [FData.FileName, FData.Count]);
+  end;
+end;
+
+procedure TMainForm.mnuUpdateCountryClick(Sender: TObject);
+var
+  err: String;
+  i: Integer;
+  store_API_Key: Boolean = false;
+begin
+  if FApiKey = '' then begin
+    FApiKey := InputBox('Please enter your API key', 'API-Key', FApiKey);
+    if FApiKey = '' then
+    begin
+      MessageDlg('Api-Key required for download of gas storage data.' + LineEnding +
+        'Please register at https://agsi.gie.eu/account.', mtError, [mbOK], 0);
+      exit;
+    end;
+    store_API_Key := true;
+  end;
+
+  err := '';
+  DownloadCountry(lbCountries.ItemIndex, err);
+
+  if err = '' then
+  begin
+    FreeAndNil(FData);
+    FCountryCode := GetCountryCode(lbCountries.ItemIndex);
+    FData := TGasData.Create(App_DataDirectory, FCountryCode);
+    if store_API_Key then StoreAPIKey;
+    StatusBar.Panels[1].Text := 'Download complete.';
+  end else
+  begin
+    StatusBar.Panels[1].Text := '';
+    MessageDlg(err, mtError, [mbOK], 0);
   end;
 end;
 
